@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+
+{% block Body %}
+
+<div class="blog-posts">
+    <h1 class="info-top">Posts by <span>{{ user.username }}</span>  ({{ posts.total }})</h1>
+    {% for post in posts.items %}
+        <div class="blog-post">
+            
+            <input type="checkbox" name="" id="" class="img-check">
+            <div class="profile-pic-holder">
+                <img src="{{ url_for('static', filename = 'images/profile_pic/' + post.author.prof_pic) }}" alt="">
+            </div>
+
+            <div class="profile">
+                <div class="profile-info">
+                    <a href="">{{ post.author.username }}</a>
+                    <p>{{ post.create_date.strftime('%Y-%m-%d') }}</p> 
+                </div>
+                
+            </div>
+            
+            <div class="post-body">
+                <hr>
+                <h2><a href="{{ url_for('posts.View_Post', post_id = post.id) }}">{{ post.title }}</a></h2>
+                <p>{{ post.content }}</p>
+            </div>
+
+            <div class="picture-display">
+                
+                <img src="{{ url_for('static', filename = 'images/profile_pic/' + post.author.prof_pic) }}" alt="">
+            </div>
+        </div>
+    {% endfor %}
+   
+</div>
+
+
+
+
+
+{% endblock Body %}
+
+{% block more %}
+    <div class="after-post">
+        {% for page_num in posts.iter_pages(left_edge = 1, right_edge = 1, left_current = 2, right_current = 3) %}
+            {% if page_num %}
+                {% if page_num == posts.page %}
+                    <a class="btn-info solid" href="{{ url_for('users.User_Posts', username = user.username, page = page_num) }}">{{ page_num }}</a>
+                {% else %}
+                    <a class="btn-info" href="{{ url_for('users.User_Posts', username = user.username,  page = page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                ...
+            {% endif %}
+
+        {% endfor %}
+    </div>
+
+    
+
+{% endblock more %}
